@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Assignment System</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+        .checkout {
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            background-color: #f9f9f9;
+        }
+        .queue {
+            list-style-type: none;
+            padding: 0;
+        }
+        .queue li {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        .total {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .input-section {
+            margin: 20px;
+        }
+        .input-section input {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .input-section button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .input-section button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkout">
+            <h2>Checkout 1</h2>
+            <ul class="queue"></ul>
+            <p class="total">Total items: 0</p>
+        </div>
+        <div class="checkout">
+            <h2>Checkout 2</h2>
+            <ul class="queue"></ul>
+            <p class="total">Total items: 0</p>
+        </div>
+        <div class="checkout">
+            <h2>Checkout 3</h2>
+            <ul class="queue"></ul>
+            <p class="total">Total items: 0</p>
+        </div>
+        <div class="checkout">
+            <h2>Checkout 4</h2>
+            <ul class="queue"></ul>
+            <p class="total">Total items: 0</p>
+        </div>
+        <div class="checkout">
+            <h2>Checkout 5</h2>
+            <ul class="queue"></ul>
+            <p class="total">Total items: 0</p>
+        </div>
+    </div>
+    <div class="input-section">
+        <input type="number" id="items" placeholder="Number of items" min="1">
+        <button id="assign">Assign Customer</button>
+    </div>
+
+    <script>
+        const numCheckouts = 5;
+
+        const checkouts = Array.from({ length: numCheckouts }, () => ({ queue: [], total_items: 0 }));
+
+        const queues = document.querySelectorAll('.queue');
+        const totals = document.querySelectorAll('.total');
+
+        function assignCustomer(items) {
+            // Find the checkout with the smallest total items
+            let min_total = Infinity;
+            let min_index = -1;
+            for (let i = 0; i < numCheckouts; i++) {
+                if (checkouts[i].total_items < min_total) {
+                    min_total = checkouts[i].total_items;
+                    min_index = i;
+                }
+            }
+
+            checkouts[min_index].queue.push(items);
+            checkouts[min_index].total_items += items;
+
+            const li = document.createElement('li');
+            li.textContent = items;
+            queues[min_index].appendChild(li);
+            totals[min_index].textContent = `Total items: ${checkouts[min_index].total_items}`;
+        }
+        document.getElementById('assign').addEventListener('click', () => {
+            const itemsInput = document.getElementById('items');
+            const items = parseInt(itemsInput.value);
+            if (isNaN(items) || items <= 0) {
+                alert('Please enter a positive integer');
+                return;
+            }
+            assignCustomer(items);
+            itemsInput.value = '';
+        });
+    </script>
+</body>
+</html>
